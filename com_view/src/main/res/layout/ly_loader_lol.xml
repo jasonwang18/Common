@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loading_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:padding="@dimen/dp_5"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.supcon.common.view.view.loader.CircularLoaderView
+            android:id="@+id/common_loader"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/sh_loader_default"
+            app:spinning_bar_padding="0dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_width="5dp"
+            app:initialCornerAngle="0dp"
+            app:finalCornerAngle="50dp"
+            />
+
+        <TextView
+            android:id="@+id/common_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:padding="@dimen/dp_5"
+            android:gravity="center_horizontal"
+            android:text="  正在加载..."
+            android:textColor="@color/font_1a1a1a"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.jasonwang18'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+
+// 解决build警告：编码GBK的不可映射字符
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+}

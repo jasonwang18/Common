@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="ptr_new_header">
+        <item name="android:indeterminateDrawable">@anim/ptr_new_header_totate</item>
+        <item name="android:minWidth">16dip</item>
+        <item name="android:maxWidth">16dip</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+</resources>

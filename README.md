@@ -1,7 +1,7 @@
 # Common
 mvp base repositorty
 
-Project Gradle Config
+# Project Gradle Config
 allprojects {
     repositories {
         ....
@@ -10,7 +10,7 @@ allprojects {
 }
 
 
-Module Gradle Config
+# Module Gradle Config
 dependencies{
       implementation 'com.github.jasonwang18.common:com_view:1.0.0'
       implementation 'com.github.jasonwang18.common:com_router:1.0.0'

@@ -1,15 +1,15 @@
-package com.supcon.common;
+package com.supcon.common.ui;
 
 import com.app.annotation.apt.Router;
-import com.app.annotation.javassist.Bus;
+import com.supcon.common.R;
 import com.supcon.common.view.base.activity.BaseActivity;
 
 /**
  * Created by wangshizhan on 2018/4/28.
  * Email:wangshizhan@supcon.com
  */
-//@Router("routerTest")
-public class RouterTestActivity extends BaseActivity{
+@Router("routerTest2")
+public class RouterTestActivity2 extends BaseActivity{
 
 
     @Override
@@ -20,11 +20,6 @@ public class RouterTestActivity extends BaseActivity{
     @Override
     protected void onInit() {
         super.onInit();
-
-    }
-
-    @Bus(0x0000)
-    public void onLogin(){
 
     }
 }

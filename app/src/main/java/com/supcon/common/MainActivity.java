@@ -8,12 +8,14 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.app.annotation.apt.Router;
-import com.supcon.IntentRouter;
+import com.app.annotation.javassist.Bus;
+import com.supcon.common.com_router.event.OkBus;
 import com.supcon.common.com_router.util.RouterManager;
 import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.view.loader.CircularLoaderView;
 
-@Router("main")
+//@Router("main")
 public class MainActivity extends BaseActivity {
 
     CircularLoaderView mCircularLoaderView;
@@ -31,7 +33,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.routerText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentRouter.go(context, "routerTest");
+//                IntentRouter.go(context, "routerTest");
             }
         });
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
@@ -118,7 +120,7 @@ public class MainActivity extends BaseActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                            mLoaderController.closeLoader();
+                            loaderController.closeLoader();
                     }
                 }, 5000);
             }
@@ -150,6 +152,7 @@ public class MainActivity extends BaseActivity {
         super.onAttachedToWindow();
 
 //        onLoading("正在加载。。。");
+        OkBus.getInstance().onEvent(1);
     }
 
     private void animateButtonAndRevert(final CircularLoaderView circular, final int fillColor, final Bitmap bitmap) {
@@ -179,4 +182,9 @@ public class MainActivity extends BaseActivity {
         handler.postDelayed(runnableRevert, 4100);
     }
 
+
+    @Bus(1)
+    public void onLogin() {
+        LogUtil.i("onLogin");
+    }
 }

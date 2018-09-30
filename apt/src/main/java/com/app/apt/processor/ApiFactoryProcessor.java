@@ -57,16 +57,14 @@ public class ApiFactoryProcessor implements IProcessor {
                 }
 
                 if(CLIENT_PATH == null) {
-                    String temp = element.getQualifiedName().toString();
-                    temp = temp.substring(0, temp.lastIndexOf("."));
-                    String PACKAGE_NAME = temp.substring(0, temp.lastIndexOf("."));
-                    CLIENT_PATH = PACKAGE_NAME + ".network";
+//                    String temp = element.getQualifiedName().toString();
+//                    temp = temp.substring(0, temp.lastIndexOf("."));
+//                    String PACKAGE_NAME = temp.substring(0, temp.lastIndexOf("."));
+//                    CLIENT_PATH = PACKAGE_NAME + ".network";
+                    CLIENT_PATH = element.getEnclosingElement().toString();
                 }
 
                 for (Element e : element.getEnclosedElements()) {
-
-
-
                     ExecutableElement executableElement = (ExecutableElement) e;
                     MethodSpec.Builder methodBuilder =
                             MethodSpec.methodBuilder(e.getSimpleName().toString())
@@ -95,10 +93,11 @@ public class ApiFactoryProcessor implements IProcessor {
                     if("".equals(paramsString)){
                         methodBuilder.addStatement(
                                 "return $T.getInstance()" +
-                                        ".retrofit.create($L.class).$L()" +
+                                        ".retrofit.create($T.class).$L()" +
                                         ".compose($T.io_main())"
                                 , ClassName.get("com.supcon.mes.mbap.network", "Api")
-                                , element.getQualifiedName()
+//                                , element.getQualifiedName()
+                                , ClassName.get(element)
                                 , e.getSimpleName().toString()
                                 , ClassName.get("com.supcon.common.com_http.util", "RxSchedulers"));
                         tb.addMethod(methodBuilder.build());
@@ -107,10 +106,11 @@ public class ApiFactoryProcessor implements IProcessor {
                     else {
                         methodBuilder.addStatement(
                                 "return $T.getInstance()" +
-                                        ".retrofit.create($L.class).$L($L)" +
+                                        ".retrofit.create($T.class).$L($L)" +
                                         ".compose($T.io_main())"
                                 , ClassName.get("com.supcon.mes.mbap.network", "Api")
-                                , element.getQualifiedName()
+//                                , element.getQualifiedName()
+                                , ClassName.get(element)
                                 , e.getSimpleName().toString()
                                 , paramsString.substring(0, paramsString.length() - 1)
                                 , ClassName.get("com.supcon.common.com_http.util", "RxSchedulers"));

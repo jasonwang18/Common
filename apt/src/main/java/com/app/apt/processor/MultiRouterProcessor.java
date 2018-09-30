@@ -19,6 +19,7 @@ import javax.annotation.processing.FilerException;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
+import javax.tools.Diagnostic;
 
 import static com.squareup.javapoet.TypeSpec.classBuilder;
 import static javax.lang.model.element.Modifier.FINAL;
@@ -62,19 +63,20 @@ public class MultiRouterProcessor implements IProcessor {
         CodeBlock.Builder blockBuilderGo = CodeBlock.builder();
         ClassName mIntentClassName = ClassName.get("android.content", "Intent");
 
-        blockBuilderGo.add("$L intent =" +
-                        "new $L();\n",
+        blockBuilderGo.add("$T intent =" +
+                        "new $T();\n",
                 mIntentClassName,
                 mIntentClassName
         );
 
         blockBuilderGo.add("if(extra != null)\n");
-        blockBuilderGo.add("\t\tintent.putExtras(extra);\n");
+        blockBuilderGo.addStatement("\tintent.putExtras(extra)");
         blockBuilderGo.beginControlFlow(" switch (name)");//括号开始
 
         List<RouterActivityModel> mRouterActivityModels = new ArrayList<>();
         try {
             for (TypeElement element : ElementFilter.typesIn(roundEnv.getElementsAnnotatedWith(Router.class))) {
+                mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "正在处理: " + element.toString());
                 ClassName currentType = ClassName.get(element);
                 if (mList.contains(currentType)) continue;
                 mList.add(currentType);
@@ -86,9 +88,18 @@ public class MultiRouterProcessor implements IProcessor {
                 mRouterActivityModels.add(mRouterActivityModel);
 
                 if(PACKAGE_NAME == null) {
-                    String temp = element.getQualifiedName().toString();
-                    temp = temp.substring(0, temp.lastIndexOf("."));
-                    PACKAGE_NAME = temp.substring(0, temp.lastIndexOf("."));
+//                    String temp = element.getQualifiedName().toString();
+//                    temp = temp.substring(0, temp.lastIndexOf("."));
+//                    PACKAGE_NAME = temp.substring(0, temp.lastIndexOf("."));
+                    String temp = element.getEnclosingElement().toString();
+                    if(temp.contains(".ui")){
+                        PACKAGE_NAME = temp.substring(0, temp.lastIndexOf(".ui"));
+                    }
+                    else{
+                        PACKAGE_NAME = temp;
+                    }
+//                    PACKAGE_NAME = element.getEnclosingElement().toString();
+//                    mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "PACKAGE_NAME: " + PACKAGE_NAME);
                 }
             }
 
@@ -97,28 +108,26 @@ public class MultiRouterProcessor implements IProcessor {
             }
 
             for (RouterActivityModel item : mRouterActivityModels) {
-                blockBuilderGo.add("case $S: \n", item.getActionName());
-                blockBuilderGo.add("intent.setClass(context, $L.class);\n", item.getElement());
-                blockBuilderGo.addStatement("\nbreak");
+                blockBuilderGo.add("\tcase $S: \n", item.getActionName());
+                blockBuilderGo.addStatement("\t\tintent.setClass(context, $T.class)", item.getElement());
+                blockBuilderGo.addStatement("\t\tbreak");
 
-                staticBuilderGo.addStatement("$L.getInstance().register(\"$L\", $L.class)",
+                staticBuilderGo.addStatement("$T.getInstance().register(\"$L\", $T.class)",
                         routerManagerClassName,
                         item.getActionName(),
-                        item.getElement().getQualifiedName()
+                        item.getElement().asType()
                 );
             }
             blockBuilderGo.add("default: \n");
 
-            blockBuilderGo.add("$L routerManager = $L.getInstance();\n", routerManagerClassName, routerManagerClassName);
-            blockBuilderGo.add("Class destinationClass = routerManager.getDestination(name);\n");
-            blockBuilderGo.addStatement("if(destinationClass == null) return");
-            blockBuilderGo.addStatement(
-                    "intent.setClass(context, destinationClass);\n"+
-                    "break");
+            blockBuilderGo.addStatement("\t\t$T routerManager = $T.getInstance()", routerManagerClassName, routerManagerClassName);
+            blockBuilderGo.addStatement("\t\tClass destinationClass = routerManager.getDestination(name)");
+            blockBuilderGo.addStatement("\t\tif(destinationClass == null) return");
+            blockBuilderGo.addStatement("\t\tintent.setClass(context, destinationClass)");
+            blockBuilderGo.addStatement("\t\tbreak");
 
             blockBuilderGo.endControlFlow();
-            blockBuilderGo.addStatement("context.startActivity(intent)"
-            );
+            blockBuilderGo.addStatement("context.startActivity(intent)");
             methodBuilder1.addCode(blockBuilderGo.build());
 
             tb.addStaticBlock(staticBuilderGo.build());

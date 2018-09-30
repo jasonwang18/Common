@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+//import com.app.plugin.AspectjPlugin
+//import com.app.plugin.JavassistPlugin
 
 android {
     compileSdkVersion 27
@@ -43,6 +45,12 @@ dependencies {
     implementation project(':annotation')
     implementation project(':com_view')
     implementation project(':com_router')
+    implementation project(':com_http')
+    implementation "com.github.jasonwang18:bapkit:1.1.0"
+
     annotationProcessor project(':apt')
 
 }
+
+//apply plugin: AspectjPlugin
+//apply plugin: JavassistPlugin

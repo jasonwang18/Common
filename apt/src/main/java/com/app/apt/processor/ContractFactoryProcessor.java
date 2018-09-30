@@ -23,6 +23,7 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic;
 
@@ -47,39 +48,31 @@ public class ContractFactoryProcessor implements IProcessor {
                 mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "正在处理: " + element.toString());
                 String CLASS_NAME = element.getSimpleName().toString().replace("API","Contract");
 
-                String temp  = element.getQualifiedName().toString();
-                temp = temp.substring(0, temp.lastIndexOf("."));
-                String PACKAGE_NAME = temp.substring(0, temp.lastIndexOf("."));
+                String API_PATH  = element.getEnclosingElement().toString();
+                String PACKAGE_NAME = API_PATH.substring(0, API_PATH.lastIndexOf("."));
                 String CONTRACT_PATH = PACKAGE_NAME+".contract";
                 String BEAN_PATH = PACKAGE_NAME+".bean";
-                String API_PATH = PACKAGE_NAME+".api";
 
-                mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "生成Contract: " + CLASS_NAME);
-                mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "包名: " + PACKAGE_NAME);
+//                mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "生成Contract: " + CLASS_NAME);
+//                mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "包名: " + PACKAGE_NAME);
 
-//                AnnotationValue annotationValue = null;
-//                for( AnnotationMirror am : element.getAnnotationMirrors() ){
-//                    if(ContractFactory.class.getName().equals(am.getAnnotationType().toString()))
-//                    {
-//                        for( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : am.getElementValues().entrySet() )
-//                        {
-//                            if( "entites".equals(
-//                                entry.getKey().getSimpleName().toString() ) )
-//                            {
-//                                annotationValue = entry.getValue();
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-
-                List<String> entityClass = null;
-
-//                if(annotationValue!=null){
-//                    entityClass = (List<String>)annotationValue.getValue();
-//                }
-
-
+                String[] entityClass = null;
+                for( AnnotationMirror am : element.getAnnotationMirrors() ){
+                    if(ContractFactory.class.getName().equals(am.getAnnotationType().toString()))
+                    {
+                        for( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : am.getElementValues().entrySet() )
+                        {
+                            if( "entites".equals(
+                                    entry.getKey().getSimpleName().toString() ) )
+                            {
+                                AnnotationValue annotationValue = entry.getValue();
+                                mAbstractProcessor.mMessager.printMessage(Diagnostic.Kind.NOTE, "entities: " + annotationValue.toString());
+                                entityClass =  annotationValue.toString().replace(".class","").replace("{","").replace("}","").split(",");
+                                break;
+                            }
+                        }
+                    }
+                }
 
 
                 TypeSpec.Builder tb = interfaceBuilder(CLASS_NAME).addModifiers(PUBLIC, STATIC)
@@ -92,8 +85,6 @@ public class ContractFactoryProcessor implements IProcessor {
                                 .addSuperinterface(ClassName.get("com.supcon.common.view.contract","IBaseView"))
                                 .addJavadoc("@View created by apt\n");
 
-                entityClass = Arrays.asList(element.getAnnotation(ContractFactory.class).entites());
-
                 List<Element> enclosedMethods = new ArrayList<>();
 //                enclosedMethods.addAll(element.getSuperclass().getEnclosedElements());
                 enclosedMethods.addAll(element.getEnclosedElements());
@@ -103,33 +94,51 @@ public class ContractFactoryProcessor implements IProcessor {
                     ExecutableElement executableElement = (ExecutableElement) e;
                     MethodSpec.Builder successMethodBuilder = null;
 
-                    if( (entityClass.size() >= index+1) && !"".equals(entityClass.get(index)) ) {
+//                    if( (entityClass.size() >= index+1) && !"".equals(entityClass.get(index)) ) {
+//
+//                        String entityName = entityClass.get(index);
+//
+//                        boolean isFullPath = entityName.contains(".");
+//
+//                        ClassName entityClassName = null;
+//
+//                        if(isFullPath){
+//                            entityClassName = ClassName.get(entityName.substring(0, entityName.lastIndexOf(".")), entityName.substring(entityName.lastIndexOf(".")+1, entityName.length()));
+//                        }
+//                        else{
+//                            entityClassName = ClassName.get(BEAN_PATH, entityName);
+//                        }
+//
+//                        successMethodBuilder =
+//                                MethodSpec.methodBuilder(e.getSimpleName().toString()+"Success")
+//                                        .addParameter(entityClassName, "entity")
+//                                        .addJavadoc("@method create by apt\n")
+//                                        .addModifiers(PUBLIC, ABSTRACT);
+//                    }
+//                    else {
+//                        successMethodBuilder =
+//                                MethodSpec.methodBuilder(e.getSimpleName().toString() + "Success")
+//                                        .addJavadoc("@method create by apt\n")
+//                                        .addModifiers(PUBLIC, ABSTRACT);
+//                    }
 
-                        String entityName = entityClass.get(index);
-
-                        boolean isFullPath = entityName.contains(".");
-
-                        ClassName entityClassName = null;
-
-                        if(isFullPath){
-                            entityClassName = ClassName.get(entityName.substring(0, entityName.lastIndexOf(".")), entityName.substring(entityName.lastIndexOf(".")+1, entityName.length()));
-                        }
-                        else{
-                            entityClassName = ClassName.get(BEAN_PATH, entityName);
-                        }
-
+                    if(entityClass!=null && entityClass.length > index
+                            &&entityClass[index]!=null && !entityClass[index].contains("NullEntity")){
+                        String currentClass = entityClass[index];
                         successMethodBuilder =
                                 MethodSpec.methodBuilder(e.getSimpleName().toString()+"Success")
-                                        .addParameter(entityClassName, "entity")
+                                        .addParameter(ClassName.get(currentClass.substring(0, currentClass.lastIndexOf(".")),
+                                                currentClass.substring(currentClass.lastIndexOf(".")+1)), "entity")
                                         .addJavadoc("@method create by apt\n")
                                         .addModifiers(PUBLIC, ABSTRACT);
                     }
-                    else {
+                    else{
                         successMethodBuilder =
                                 MethodSpec.methodBuilder(e.getSimpleName().toString() + "Success")
                                         .addJavadoc("@method create by apt\n")
                                         .addModifiers(PUBLIC, ABSTRACT);
                     }
+
 
 
                     successMethodBuilder.returns(TypeName.get(executableElement.getReturnType()));

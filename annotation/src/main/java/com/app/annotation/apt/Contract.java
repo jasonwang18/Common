@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface ContractFactory {
+public @interface Contract {
     Class<?>[] entites();
 }

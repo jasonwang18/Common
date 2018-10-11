@@ -2,9 +2,17 @@ package com.supcon.common.view.base.activity;
 
 import android.text.TextUtils;
 
+import com.app.annotation.Controller;
+import com.app.annotation.Presenter;
+import com.supcon.common.com_router.router.PresenterRouter;
 import com.supcon.common.view.Lifecycle;
 import com.supcon.common.view.LifecycleManage;
 import com.supcon.common.view.base.presenter.BasePresenter;
+import com.supcon.common.view.contract.IBaseView;
+import com.supcon.common.view.util.InstanceUtil;
+import com.supcon.common.view.util.LogUtil;
+
+import java.lang.annotation.Annotation;
 
 
 /**
@@ -13,6 +21,25 @@ import com.supcon.common.view.base.presenter.BasePresenter;
 public abstract class BaseControllerActivity extends BasePresenterActivity {
 
     protected LifecycleManage controllers = new LifecycleManage();
+    
+    protected void initControllers() {
+        Annotation[] annotations = getClass().getAnnotations();
+        for (Annotation annotation:annotations){
+
+            if(annotation instanceof Controller){
+                Class[] controllerClasses = ((Controller) annotation).value();
+
+                for(Class controller : controllerClasses){
+
+                    Lifecycle baseController = (Lifecycle) InstanceUtil.getInstance(controller);
+                    LogUtil.d("controller " + controller.getName() + " added!");
+                    controllers.register(controller.getSimpleName(), baseController);
+
+                }
+
+            }
+        }
+    }
 
     /**
      * 注册控制器
@@ -30,6 +57,16 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
     /**
      * 获取注册的控制器
      *
+     * @param  clazz
+     * @return 注册器
+     */
+    public <T extends Lifecycle> T  getController(Class<T> clazz) {
+        return (T) controllers.get(clazz.getSimpleName());
+    }
+
+    /**
+     * 获取注册的控制器
+     *
      * @param key key
      * @return 注册器
      */
@@ -40,6 +77,7 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
     @Override
     protected void onInit() {
         super.onInit();
+        initControllers();
         onRegisterController();
         controllers.onInit();
     }

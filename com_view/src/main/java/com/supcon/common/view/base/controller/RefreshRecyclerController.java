@@ -32,6 +32,10 @@ public class RefreshRecyclerController<TModel> extends RefreshListController<Rec
     }
 
 
+    @Override
+    public void onInit() {
+        super.onInit();
+    }
 
     @Override
     public void initView() {

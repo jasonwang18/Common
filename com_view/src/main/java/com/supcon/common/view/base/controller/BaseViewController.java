@@ -1,6 +1,7 @@
 package com.supcon.common.view.base.controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 
 import com.supcon.common.view.util.ViewBinder;
@@ -13,16 +14,19 @@ public class BaseViewController extends BasePresenterController {
 
     private View rootView;
     private Activity mActivity;
+    protected Context context;
 
     public BaseViewController(View rootView){
         super();
         this.rootView = rootView;
+        context = rootView.getContext();
         bindView();
     }
 
     public BaseViewController(Activity activity){
         super();
         this.mActivity = activity;
+        context = activity.getBaseContext();
         bindView();
     }
 

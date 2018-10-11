@@ -23,6 +23,13 @@ public class LifecycleManage implements Lifecycle {
     }
 
     @Override
+    public void onInit() {
+        for (Map.Entry<String, Lifecycle> entry : iifecycleMap.entrySet()) {
+            entry.getValue().onInit();
+        }
+    }
+
+    @Override
     public void initView() {
         for (Map.Entry<String, Lifecycle> entry : iifecycleMap.entrySet()) {
             entry.getValue().initView();

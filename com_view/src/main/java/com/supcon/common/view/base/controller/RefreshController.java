@@ -63,6 +63,11 @@ public class RefreshController<TContentView extends View>  implements PtrHandler
     }
 
     @Override
+    public void onInit() {
+
+    }
+
+    @Override
     public void initView() {
 
         if (refreshFrameLayout != null) {

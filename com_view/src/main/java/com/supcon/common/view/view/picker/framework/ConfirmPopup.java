@@ -43,7 +43,7 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
     protected int submitTextSize = 0;
     protected int titleTextSize = 0;
     protected int backgroundColor = Color.WHITE;
-    protected TextView cancelButton, submitButton;
+    protected TextView cancelButton, submitButton, swapButton;
     protected View titleView;
     protected View headerView, centerView, footerView;
 

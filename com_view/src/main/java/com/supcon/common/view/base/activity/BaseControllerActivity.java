@@ -41,6 +41,7 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
     protected void onInit() {
         super.onInit();
         onRegisterController();
+        controllers.onInit();
     }
 
 

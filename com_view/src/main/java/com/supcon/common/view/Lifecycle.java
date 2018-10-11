@@ -7,6 +7,10 @@ package com.supcon.common.view;
 
 public interface Lifecycle {
     /**
+     * 初始化
+     */
+    void onInit();
+    /**
      * 初始化VIEW
      */
     void initView();

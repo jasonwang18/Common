@@ -16,6 +16,7 @@ dependencies{<br>
       implementation 'com.github.jasonwang18.common:com_router:1.2.0'<br>
       implementation 'com.github.jasonwang18.common:com_http:1.2.0'<br>
       implementation 'com.github.jasonwang18.common:annotation:1.2.0'<br>
+      implementation 'com.github.jasonwang18:bapkit:1.2.0'
       annotationProcessor 'com.github.jasonwang18.common:apt:1.2.0@jar'<br>
       implementation 'com.android.support:appcompat-v7:27.1.1'<br>
       implementation 'com.android.support:recyclerview-v7:27.1.1'<br>

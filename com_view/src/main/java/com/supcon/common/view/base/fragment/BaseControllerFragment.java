@@ -1,10 +1,17 @@
 package com.supcon.common.view.base.fragment;
 
 import android.text.TextUtils;
+import android.view.View;
 
+import com.app.annotation.Controller;
 import com.supcon.common.view.Lifecycle;
 import com.supcon.common.view.LifecycleManage;
-import com.supcon.common.view.base.presenter.BasePresenter;
+import com.supcon.common.view.util.InstanceUtil;
+import com.supcon.common.view.util.LogUtil;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by wangshizhan on 16/12/1.
@@ -12,6 +19,42 @@ import com.supcon.common.view.base.presenter.BasePresenter;
 public abstract class BaseControllerFragment extends BasePresenterFragment {
     protected LifecycleManage controllers = new LifecycleManage();
 
+    protected void initControllers() {
+        Annotation[] annotations = getClass().getAnnotations();
+        for (Annotation annotation:annotations){
+
+            if(annotation instanceof Controller){
+                Class[] controllerClasses = ((Controller) annotation).value();
+
+                for(Class controller : controllerClasses){
+
+                    try {
+                        Constructor constructor = controller.getConstructor(new Class[]{View.class});
+                        Lifecycle baseController = null;
+                        try {
+                            baseController = (Lifecycle) constructor.newInstance(new Object[]{rootView});
+                        } catch (java.lang.InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(baseController!=null) {
+                            LogUtil.d("controller " + controller.getName() + " added!");
+                            controllers.register(controller.getSimpleName(), baseController);
+                        }
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+            }
+        }
+    }
     /**
      * 注册控制器
      *
@@ -44,7 +87,19 @@ public abstract class BaseControllerFragment extends BasePresenterFragment {
     @Override
     protected void onInit() {
         super.onInit();
+        initControllers();
         onRegisterController();
+        controllers.onInit();
+    }
+
+    /**
+     * 获取注册的控制器
+     *
+     * @param  clazz
+     * @return 注册器
+     */
+    public <T extends Lifecycle> T  getController(Class<T> clazz) {
+        return (T) controllers.get(clazz.getSimpleName());
     }
 
     /**

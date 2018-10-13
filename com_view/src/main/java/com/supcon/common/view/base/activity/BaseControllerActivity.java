@@ -1,18 +1,17 @@
 package com.supcon.common.view.base.activity;
 
 import android.text.TextUtils;
+import android.view.View;
 
 import com.app.annotation.Controller;
-import com.app.annotation.Presenter;
-import com.supcon.common.com_router.router.PresenterRouter;
 import com.supcon.common.view.Lifecycle;
 import com.supcon.common.view.LifecycleManage;
-import com.supcon.common.view.base.presenter.BasePresenter;
-import com.supcon.common.view.contract.IBaseView;
 import com.supcon.common.view.util.InstanceUtil;
 import com.supcon.common.view.util.LogUtil;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -31,9 +30,27 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
 
                 for(Class controller : controllerClasses){
 
-                    Lifecycle baseController = (Lifecycle) InstanceUtil.getInstance(controller);
-                    LogUtil.d("controller " + controller.getName() + " added!");
-                    controllers.register(controller.getSimpleName(), baseController);
+                    try {
+                        Constructor constructor = controller.getConstructor(new Class[]{View.class});
+                        Lifecycle baseController = null;
+                        try {
+                            baseController = (Lifecycle) constructor.newInstance(new Object[]{rootView});
+                        } catch (java.lang.InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(baseController!=null) {
+                            LogUtil.d("controller " + controller.getName() + " added!");
+                            controllers.register(controller.getSimpleName(), baseController);
+                        }
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+
 
                 }
 

@@ -23,13 +23,6 @@ public class BaseViewController extends BasePresenterController {
         bindView();
     }
 
-    public BaseViewController(Activity activity){
-        super();
-        this.mActivity = activity;
-        context = activity.getBaseContext();
-        bindView();
-    }
-
     private void bindView(){
 
         if(rootView!=null)

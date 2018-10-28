@@ -1,12 +1,12 @@
 package com.supcon.common.view.base.fragment;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.app.annotation.Controller;
 import com.supcon.common.view.Lifecycle;
 import com.supcon.common.view.LifecycleManage;
-import com.supcon.common.view.util.InstanceUtil;
 import com.supcon.common.view.util.LogUtil;
 
 import java.lang.annotation.Annotation;
@@ -29,16 +29,19 @@ public abstract class BaseControllerFragment extends BasePresenterFragment {
                 for(Class controller : controllerClasses){
 
                     try {
-                        Constructor constructor = controller.getConstructor(new Class[]{View.class});
+                        Constructor constructor = null;
                         Lifecycle baseController = null;
-                        try {
-                            baseController = (Lifecycle) constructor.newInstance(new Object[]{rootView});
-                        } catch (java.lang.InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
+                        if(controller.getSuperclass().getSimpleName().equals("BasePresenterController")){
+                            constructor = controller.getConstructor();
+                            baseController = (Lifecycle) constructor.newInstance();
+                        }
+                        else if(controller.getSuperclass().getSimpleName().equals("BaseDataController")) {
+                            constructor = controller.getConstructor(new Class[]{Context.class});
+                            baseController = (Lifecycle) constructor.newInstance(context);
+                        }
+                        else if(controller.getSuperclass().getSimpleName().equals("BaseViewController")){
+                            constructor = controller.getConstructor(new Class[]{View.class});
+                            baseController = (Lifecycle) constructor.newInstance(rootView);
                         }
 
                         if(baseController!=null) {
@@ -46,6 +49,12 @@ public abstract class BaseControllerFragment extends BasePresenterFragment {
                             controllers.register(controller.getSimpleName(), baseController);
                         }
                     } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (java.lang.InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
 

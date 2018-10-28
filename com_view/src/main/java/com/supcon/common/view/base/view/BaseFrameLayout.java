@@ -15,7 +15,6 @@ public abstract class BaseFrameLayout extends FrameLayout {
     protected OnChildViewClickListener onChildViewClickListener;
     protected Context context;
 
-
     public void setOnChildViewClickListener(OnChildViewClickListener onChildViewClickListener) {
         this.onChildViewClickListener = onChildViewClickListener;
     }
@@ -46,14 +45,15 @@ public abstract class BaseFrameLayout extends FrameLayout {
         this.context = context;
         if (layoutId() != 0) {
             rootView= LayoutInflater.from(context).inflate(layoutId(), this, true);
-            //LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-            //addView(view,layoutParams);
             if (rootView != null){
                 //inject
             }
 
             if (attrs != null)
                 initAttributeSet(attrs);
+        }
+        else{
+            throw new IllegalArgumentException("layoutId cannot return 0!");
         }
         initView();
         initListener();

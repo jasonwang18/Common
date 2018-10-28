@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.supcon.common.view.util.LoaderErrorMsgHelper;
@@ -31,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         onInit();
         initView();
         initListener();
-//        initData(); //初始化数据放在视图加载完成之后，防止loader显示不出来
+        initData();
     }
 
     protected void onInit() {
@@ -43,7 +45,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        initData();
     }
 
     @Override
@@ -51,6 +52,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        initData();
+    }
 
     public View getRootView(){
         return rootView;
@@ -167,5 +173,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         void onBeforFinish();
 
     }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        return super.onTouchEvent(event);
+    }
+
 
 }

@@ -15,6 +15,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 public abstract class BaseRelativeLayout extends RelativeLayout {
     protected OnChildViewClickListener onChildViewClickListener;
     protected View rootView;
+    protected Context context;
 
     public BaseRelativeLayout(Context context) {
         super(context);
@@ -42,15 +43,17 @@ public abstract class BaseRelativeLayout extends RelativeLayout {
     protected abstract int layoutId();
 
     protected void init(Context context, AttributeSet attrs) {
+        this.context = context;
         if (layoutId() != 0) {
             rootView = LayoutInflater.from(context).inflate(layoutId(), this, true);
-//            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-//            addView(rootView,layoutParams);
             if (rootView != null) {
 
             }
             if (attrs != null)
                 initAttributeSet(attrs);
+        }
+        else{
+            throw new IllegalArgumentException("layoutId cannot return 0!");
         }
         initView();
         initListener();

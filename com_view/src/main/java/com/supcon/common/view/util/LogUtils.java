@@ -22,6 +22,8 @@ public final class LogUtils {
     private static boolean isDebug = AppConfig.DEBUG_ENABLE;// 是否调试模式
     private static String debugTag = AppConfig.DEBUG_TAG;// LogCat的标记
 
+    private static String TAG = "common";
+
     public static void setIsDebug(boolean isDebug) {
         LogUtils.isDebug = isDebug;
     }
@@ -44,7 +46,7 @@ public final class LogUtils {
      * @param message the message
      */
     public static void verbose(String message) {
-        verbose("", message);
+        verbose(TAG, message);
     }
 
     /**
@@ -63,7 +65,7 @@ public final class LogUtils {
      * @param message the message
      */
     public static void i(String message) {
-        verbose("", message);
+        verbose(TAG, message);
     }
 
     /**
@@ -110,7 +112,7 @@ public final class LogUtils {
      * @param message the message
      */
     public static void debug(String message) {
-        debug("", message);
+        debug(TAG, message);
     }
 
     /**
@@ -152,7 +154,7 @@ public final class LogUtils {
      * @param message the message
      */
     public static void warn(String message) {
-        warn("", message);
+        warn(TAG, message);
     }
 
     /**
@@ -204,7 +206,7 @@ public final class LogUtils {
      * @param message the message
      */
     public static void error(String message) {
-        error("", message);
+        error(TAG, message);
     }
 
     /**

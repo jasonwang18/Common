@@ -39,6 +39,7 @@ public abstract class BaseFragment extends Fragment {
         onInit();
         initView();
         initListener();
+        initData();
         return rootView;
     }
 
@@ -61,7 +62,7 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        initData();
+//        initData();
     }
 
     /**

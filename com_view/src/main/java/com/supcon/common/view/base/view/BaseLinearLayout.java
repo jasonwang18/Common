@@ -13,8 +13,8 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
  */
 public abstract class BaseLinearLayout extends LinearLayout {
     protected OnChildViewClickListener onChildViewClickListener;
-
-
+    protected View rootView;
+    protected Context context;
     public void setOnChildViewClickListener(OnChildViewClickListener onChildViewClickListener) {
         this.onChildViewClickListener = onChildViewClickListener;
     }
@@ -42,15 +42,17 @@ public abstract class BaseLinearLayout extends LinearLayout {
     protected abstract int layoutId();
 
     protected void init(Context context, AttributeSet attrs) {
+        this.context = context;
         if (layoutId() != 0) {
-            View view = LayoutInflater.from(context).inflate(layoutId(), this, true);
-            //LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-            //addView(view,layoutParams);
-            if (view != null) {
+            rootView = LayoutInflater.from(context).inflate(layoutId(), this, true);
+            if (rootView != null) {
 
             }
             if (attrs != null)
                 initAttributeSet(attrs);
+        }
+        else{
+            throw new IllegalArgumentException("layoutId cannot return 0!");
         }
         initView();
         initListener();

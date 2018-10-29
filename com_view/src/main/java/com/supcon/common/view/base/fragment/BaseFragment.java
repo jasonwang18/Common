@@ -76,7 +76,7 @@ public abstract class BaseFragment extends Fragment {
      * 初始化监听
      */
     protected void initListener() {
-
+        ViewBinder.bindListener(this, rootView);
     }
 
     /**

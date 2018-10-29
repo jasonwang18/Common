@@ -11,6 +11,8 @@ import java.lang.annotation.Target;
  * Email:wangshizhan@supcom.com
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 public @interface OnDateChange {
+
+    String param();
 }

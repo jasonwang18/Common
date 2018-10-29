@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * OnItemChildViewClickListener
+ * 为RecyclerView Adapter 添加 OnItemChildViewClickListener
  * Created by wangshizhan on 2018/10/26
  * Email:wangshizhan@supcom.com
  */
@@ -14,6 +14,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface OnItemChild {
 
-    String adapter();
+//    String adapter();
 
 }
+
+/*
+    @OnItemChild
+    public void onChild(View childView, int position, int action, Object obj){
+
+    }
+
+ */

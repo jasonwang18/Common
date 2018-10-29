@@ -16,7 +16,6 @@ import java.util.List;
  * Email:wangshizhan@supcom.com
  */
 public class BasePresenterController extends BaseController {
-
     protected PresenterRouter presenterRouter;
     private List<BasePresenter> mPresenters = new ArrayList<>();
 

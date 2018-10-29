@@ -75,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化监听
      */
     protected void initListener() {
-
+        ViewBinder.bindListener(this, rootView);
     }
 
     /**

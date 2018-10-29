@@ -18,9 +18,8 @@ public @interface OnTextChange {
     int LONG = 2000;
     int SHORT = 200;
 
-    int debounce = DEFAULT;
 
-    int debouce();
-    String value();
+    int debouce() default DEFAULT;
+    String param();
 
 }

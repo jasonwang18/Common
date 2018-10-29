@@ -31,7 +31,7 @@ public class AppConfig {
     /**
      * @see LogUtils
      */
-    public static final String DEBUG_TAG = "COMMON_VIEW";// LogCat的标记
-    public static final boolean DEBUG_ENABLE = false;// 是否调试模式
+    public static String DEBUG_TAG = "COMMON_VIEW";// LogCat的标记
+    public static boolean DEBUG_ENABLE = false;// 是否调试模式
 
 }

@@ -89,6 +89,7 @@ public  abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder
      * 初始化监听
      */
     protected void initListener() {
+        ViewBinder.bindListener(this, itemView);
 
     }
     /**

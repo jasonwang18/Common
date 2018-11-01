@@ -7,4 +7,12 @@ import com.supcon.common.com_http.BaseEntity;
  * Email:wangshizhan@supcom.com
  */
 public class TestEntity extends BaseEntity {
+
+    public String textChangeResult;
+
+    public String itemResult = "9";
+
+    public String date = "2018-10-30 12:00:00";
+
+    public long date2 = 0;
 }

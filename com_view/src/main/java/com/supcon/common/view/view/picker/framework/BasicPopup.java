@@ -1,6 +1,5 @@
 package com.supcon.common.view.view.picker.framework;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,14 +25,14 @@ public abstract class BasicPopup<V extends View> implements DialogInterface.OnKe
         DialogInterface.OnDismissListener {
     public static final int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT;
     public static final int WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
-    protected Activity activity;
+    protected Context activity;
     protected int screenWidthPixels;
     protected int screenHeightPixels;
     private Dialog dialog;
     private FrameLayout contentLayout;
     private boolean isPrepared = false;
 
-    public BasicPopup(Activity activity) {
+    public BasicPopup(Context activity) {
         this.activity = activity;
         DisplayMetrics metrics = ScreenUtils.displayMetrics(activity);
         screenWidthPixels = metrics.widthPixels;

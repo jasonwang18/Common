@@ -22,7 +22,7 @@ public class BaseViewController extends BaseDataController {
     private void bindView(){
 
         if(rootView!=null)
-            ViewBinder.bind(this, rootView);
+            ViewBinder.bindTag(this, rootView);
 
     }
 
@@ -32,6 +32,12 @@ public class BaseViewController extends BaseDataController {
         bindView();
     }
 
+    @Override
+    public void initListener() {
+        super.initListener();
+        ViewBinder.bindCustomView(this, rootView);
+        ViewBinder.bindListener(this, rootView);
+    }
 
     @Override
     public void onDestroy() {

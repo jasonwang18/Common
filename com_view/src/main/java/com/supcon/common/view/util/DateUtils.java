@@ -227,4 +227,39 @@ public class DateUtils extends android.text.format.DateUtils {
         return formatDate(Calendar.getInstance(Locale.CHINA).getTime(), format);
     }
 
+
+    /**
+     * string2long
+     * @param time
+     * @return
+     */
+    public static long dateFormat(String time, String format){
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date == null ? 0:date.getTime();
+    }
+
+    /**
+     * long2String
+     * @param time 时间毫秒
+     * @param format 格式
+     * @return
+     */
+    public static String dateFormat(long time, String format){
+
+        if(time == 0){
+            time = System.currentTimeMillis();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        String t=simpleDateFormat.format(time);
+
+        return t;
+    }
 }

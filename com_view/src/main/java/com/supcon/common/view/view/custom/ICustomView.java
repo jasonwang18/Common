@@ -1,8 +1,10 @@
-package com.supcon.common.view.listener;
+package com.supcon.common.view.view.custom;
 
 import android.graphics.Typeface;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.supcon.common.view.listener.OnChildViewClickListener;
 
 /**
  * Created by wangshizhan on 2018/10/18

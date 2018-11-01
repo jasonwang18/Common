@@ -45,7 +45,7 @@ public class WheelView extends View {
     public static final int TEXT_COLOR_FOCUS = 0XFF0288CE;
     public static final int TEXT_COLOR_NORMAL = 0XFFBBBBBB;
     public static final int DIVIDER_COLOR = 0XFF83CDE6;
-    public static final int DIVIDER_ALPHA = 220;
+    public static final int DIVIDER_ALPHA = 100;//220
     public static final float DIVIDER_THICK = 2f;//px
     public static final int ITEM_OFF_SET = 3;
     private static final float ITEM_PADDING = 13f;//px,480X800的手机边距不能太大

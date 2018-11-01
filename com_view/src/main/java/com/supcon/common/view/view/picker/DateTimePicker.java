@@ -1,6 +1,7 @@
 package com.supcon.common.view.view.picker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -98,11 +99,11 @@ public class DateTimePicker extends WheelPicker {
      * @see #HOUR_24
      * @see #HOUR_12
      */
-    public DateTimePicker(Activity activity, @TimeMode int timeMode) {
+    public DateTimePicker(Context activity, @TimeMode int timeMode) {
         this(activity, YEAR_MONTH_DAY, timeMode);
     }
 
-    public DateTimePicker(Activity activity, @DateMode int dateMode, @TimeMode int timeMode) {
+    public DateTimePicker(Context activity, @DateMode int dateMode, @TimeMode int timeMode) {
         super(activity);
         if (dateMode == NONE && timeMode == NONE) {
             throw new IllegalArgumentException("The modes are NONE at the same time");
@@ -459,7 +460,7 @@ public class DateTimePicker extends WheelPicker {
         final WheelView secondView = createWheelView();;
 
         if (dateMode == YEAR_MONTH_DAY || dateMode == YEAR_MONTH) {
-            yearView.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1.0f));
+            yearView.setLayoutParams(new LinearLayout.LayoutParams(160, WRAP_CONTENT));
             yearView.setItems(years, selectedYearIndex);
             yearView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
                 @Override
@@ -498,7 +499,7 @@ public class DateTimePicker extends WheelPicker {
         }
 
         if (dateMode != NONE) {
-            monthView.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1.0f));
+            monthView.setLayoutParams(new LinearLayout.LayoutParams(90, WRAP_CONTENT));
             monthView.setItems(months, selectedMonthIndex);
             monthView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
                 @Override
@@ -537,7 +538,7 @@ public class DateTimePicker extends WheelPicker {
         }
 
         if (dateMode == YEAR_MONTH_DAY || dateMode == MONTH_DAY) {
-            dayView.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1.0f));
+            dayView.setLayoutParams(new LinearLayout.LayoutParams(90, WRAP_CONTENT));
             dayView.setItems(days, selectedDayIndex);
             dayView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
                 @Override
@@ -558,7 +559,7 @@ public class DateTimePicker extends WheelPicker {
         }
 
         if (timeMode != NONE) {
-            hourView.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1.0f));
+            hourView.setLayoutParams(new LinearLayout.LayoutParams(90, WRAP_CONTENT));
             hourView.setItems(hours, selectedHour);
             hourView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
                 @Override
@@ -580,7 +581,7 @@ public class DateTimePicker extends WheelPicker {
                 layout.addView(labelView);
             }
 
-            minuteView.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1.0f));
+            minuteView.setLayoutParams(new LinearLayout.LayoutParams(90, WRAP_CONTENT));
             minuteView.setItems(minutes, selectedMinute);
             minuteView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
                 @Override
@@ -600,7 +601,7 @@ public class DateTimePicker extends WheelPicker {
             }
 
             if(isSecondVisible) {
-                secondView.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1.0f));
+                secondView.setLayoutParams(new LinearLayout.LayoutParams(90, WRAP_CONTENT));
                 secondView.setItems(seconds, selectedSecond);
                 secondView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
                     @Override

@@ -1,4 +1,4 @@
-package com.supcon.common.view.listener;
+package com.supcon.common.view.view.custom;
 
 /**
  * Created by wangshizhan on 2018/8/2

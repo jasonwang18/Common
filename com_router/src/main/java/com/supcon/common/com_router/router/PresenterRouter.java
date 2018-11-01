@@ -64,7 +64,7 @@ public class PresenterRouter implements InvocationHandler{
 
         Class<?>[] interfaces = presenter.getClass().getSuperclass().getInterfaces();
 
-        if(interfaces == null && interfaces.length ==0){
+        if(interfaces == null ||  interfaces.length ==0){
             return;
         }
 

@@ -1,6 +1,7 @@
 package com.supcon.common.view.view.picker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -36,7 +37,7 @@ public class SinglePicker<T> extends WheelPicker {
         this(activity, Arrays.asList(items));
     }
 
-    public SinglePicker(Activity activity, List<T> items) {
+    public SinglePicker(Context activity, List<T> items) {
         super(activity);
         setItems(items);
     }

@@ -43,6 +43,10 @@ public abstract class BaseControllerFragment extends BasePresenterFragment {
                             constructor = controller.getConstructor(new Class[]{View.class});
                             baseController = (Lifecycle) constructor.newInstance(rootView);
                         }
+                        else{
+                            constructor = controller.getConstructor(new Class[]{View.class});
+                            baseController = (Lifecycle) constructor.newInstance(rootView);
+                        }
 
                         if(baseController!=null) {
                             LogUtil.d("controller " + controller.getName() + " added!");

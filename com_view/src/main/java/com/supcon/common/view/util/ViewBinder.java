@@ -1,24 +1,28 @@
 package com.supcon.common.view.util;
 
 import android.app.Activity;
-import android.graphics.ColorSpace;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.app.annotation.Bind;
 import com.app.annotation.BindByTag;
 import com.app.annotation.custom.OnChild;
+import com.app.annotation.custom.OnDateChange;
 import com.app.annotation.custom.OnItemChild;
 import com.app.annotation.custom.OnItemSelect;
 import com.app.annotation.custom.OnTextChange;
-import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
-import com.supcon.common.view.base.controller.CustomViewController;
+import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
+import com.supcon.common.view.base.controller.BaseController;
+import com.supcon.common.view.base.fragment.BaseFragment;
+import com.supcon.common.view.view.custom.CustomViewController;
 import com.supcon.common.view.base.controller.RefreshListController;
-import com.supcon.common.view.listener.ICustomView;
+import com.supcon.common.view.view.custom.ICustomView;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
-import com.supcon.common.view.listener.OnResultListener;
-import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.common.view.view.custom.OnContentCallback;
+import com.supcon.common.view.view.custom.OnResultListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -35,13 +39,13 @@ import java.util.Map;
 
 public class ViewBinder {
 
-    public static void bind(Activity activity) {
-        bind(activity, activity.getWindow().getDecorView());
+    public static void bindTag(Activity activity) {
+        bindTag(activity, activity.getWindow().getDecorView());
     }
 
-    public static void bind(final Object target, View source) {
-        Field[] fields = target.getClass().getDeclaredFields();
-        if (fields != null && fields.length > 0) {
+    public static void bindTag(final Object target, View source) {
+        List<Field> fields = getAllContextFields(target);
+        if (fields != null && fields.size() > 0) {
             for (final Field field : fields) {
                 try {
                     field.setAccessible(true);
@@ -53,9 +57,6 @@ public class ViewBinder {
                     if (bind != null) {
                         int viewId = bind.value();
                         field.set(target, source.findViewById(viewId));
-                        if(field.get(target)!=null){
-                            bindCustomView(target, field, source);
-                        }
                         continue;
                     }
 
@@ -63,14 +64,30 @@ public class ViewBinder {
                     if (bindByTag != null) {
                         String tag = bindByTag.value();
                         field.set(target, source.findViewWithTag(tag));
-                        if(field.get(target)!=null){
-                            bindCustomView(target, field, source);
-                        }
                         continue;
                     }
 
                     String fieldName = field.getName();
                     field.set(target, source.findViewWithTag(fieldName));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void bindCustomView(final Object target, View source) {
+        List<Field> fields = getAllContextFields(target);
+        if (fields != null && fields.size() > 0) {
+            for (final Field field : fields) {
+                try {
+                    field.setAccessible(true);
+                    if (field.get(target) == null) {
+                        continue;
+                    }
+
+                    bindCustomView(target, field, source);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -88,13 +105,59 @@ public class ViewBinder {
 
             CustomViewController customViewController = new CustomViewController(source.getContext());
 
+            final OnDateChange onDateChange = field.getAnnotation(OnDateChange.class);
+            if(onDateChange!=null){
+                Object view = field.get(target);
+                if(view!=null && view instanceof ICustomView){
+                    final ICustomView customView = (ICustomView) view;
+
+                    final Object current = getParam(target, onDateChange.param());
+                    boolean isDividerVisible = onDateChange.dividerVisble();
+                    boolean isCancelOutsideEnable = onDateChange.cancelOutsideEnable();
+                    boolean isCycleEnable = onDateChange.cycleEnable();
+                    boolean isSecondVisible = onDateChange.secondVisible();
+                    int textSize = onDateChange.textSize();
+
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("isCanceledOutsideEnable", isCancelOutsideEnable);
+                    params.put("isCycleEnable", isCycleEnable);
+                    params.put("isDividerVisible", isDividerVisible);
+                    params.put("isSecondVisible", isSecondVisible);
+//                    params.put("current", current);
+                    params.put("textSize", textSize);
+
+                    customViewController.addDate(customView, params, new OnContentCallback<Object>() {
+                        @Override
+                        public Object getContent() {
+                            return getParam(target, onDateChange.param());
+                        }
+                    },new OnResultListener<String>() {
+                        @Override
+                        public void onResult(String result) {
+                            customView.setContent(result);
+                            String param = onDateChange.param();
+                            if(current instanceof String ){
+                                setParam(target, result, param);
+                            }
+                            else {
+                                setParam(target, DateUtils.dateFormat(result, "yyyy-MM-dd HH:mm:ss"),  param);
+                            }
+                        }
+                    });
+
+                }
+            }
+
             final OnItemSelect onItemSelect = field.getAnnotation(OnItemSelect.class);
             if(onItemSelect!=null){
                 Object view = field.get(target);
                 if(view!=null && view instanceof ICustomView){
-                    ICustomView customView = (ICustomView) view;
-                    String[] values = onItemSelect.values();
-                    final String current = onItemSelect.current();
+                    final ICustomView customView = (ICustomView) view;
+                    String valuesStr = onItemSelect.values();
+
+                    String[] values = (String[]) getFieldValue(target, valuesStr);
+
+//                    final Object current = getParam(target, onItemSelect.param());
                     boolean isDividerVisible = onItemSelect.dividerVisble();
                     boolean isCancelOutsideEnable = onItemSelect.cancelOutsideEnable();
                     boolean isCycleEnable = onItemSelect.cycleEnable();
@@ -104,15 +167,22 @@ public class ViewBinder {
                     params.put("isCanceledOutsideEnable", isCancelOutsideEnable);
                     params.put("isCycleEnable", isCycleEnable);
                     params.put("isDividerVisible", isDividerVisible);
-                    params.put("current", current);
+//                    params.put("current", current);
                     params.put("values", values);
                     params.put("textSize", textSize);
 
-                    customViewController.addSpinner(customView, params, new OnResultListener<String>() {
+                    customViewController.addSpinner(customView, params, new OnContentCallback<String>() {
+                        @Override
+                        public String getContent() {
+                            return (String) getParam(target, onItemSelect.param());
+                        }
+                    },new OnResultListener<String>() {
                         @Override
                         public void onResult(String result) {
+                            customView.setContent(result);
                             String param = onItemSelect.param();
                             setParam(target, result,  param);
+
                         }
                     });
 
@@ -140,34 +210,74 @@ public class ViewBinder {
         }
     }
 
-    private static void setParam(Object target, String result, String param){
+    private static <T> void setParam(Object target, T result, String param){
         try {
 
             Field paramField = null;
             if(param.contains(".")){
-                Field entityField = target.getClass().getDeclaredField(param.split("\\.")[0]);
+//                Field entityField = target.getClass().getDeclaredField(param.split("\\.")[0]);
+                Field entityField = getOneField(target, param.split("\\.")[0]);
+                if(entityField == null){
+                    return;
+                }
                 entityField.setAccessible(true);
                 Object entity = entityField.get(target);
                 if(entity!=null){
-                    paramField = entity.getClass().getDeclaredField(param.split("\\.")[1]);
+//                    paramField = entity.getClass().getDeclaredField(param.split("\\.")[1]);
+                    paramField = getOneField(entity, param.split("\\.")[1]);
+                        if(paramField!= null){
+                            paramField.setAccessible(true);
+                            paramField.set(entity, result);
+                        }
+                    }
+                }
 
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static Object getParam(Object target, String param){
+
+        if(TextUtils.isEmpty(param)){
+            return null;
+        }
+
+        try {
+
+            Field paramField = null;
+            if(param.contains(".")){
+//                Field entityField = target.getClass().getDeclaredField(param.split("\\.")[0]);
+                Field entityField = getOneField(target, param.split("\\.")[0]);
+                if(entityField == null){
+                    return null;
+                }
+                entityField.setAccessible(true);
+                Object entity = entityField.get(target);
+                if(entity!=null){
+//                    paramField = entity.getClass().getDeclaredField(param.split("\\.")[1]);
+                    paramField = getOneField(entity, param.split("\\.")[1]);
                     if(paramField!= null){
                         paramField.setAccessible(true);
-                        paramField.set(entity, result);
+                        Object current =  paramField.get(entity);
+                        if(current!=null){
+                            return current;
+                        }
                     }
                 }
             }
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
         }
+
+        return null;
     }
 
     public static void bindListener(Object target, View source) {
-        Method[] methods = target.getClass().getDeclaredMethods();
-        if (methods != null && methods.length > 0) {
+        List<Method> methods = getAllContextMethods(target);
+        if (methods != null && methods.size() > 0) {
             for (Method method : methods) {
                 try {
                     method.setAccessible(true);
@@ -266,6 +376,39 @@ public class ViewBinder {
     }
 
 
+    private static List<Field> getAllContextFields(Object target){
+        List<Field> fieldList = new ArrayList<>() ;
+        Class tempClass = target.getClass();
+        while (tempClass != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
+
+            if(tempClass.getName().contains("com.supcon.common.view")){
+                tempClass = null;
+            }
+            else {
+                fieldList.addAll(Arrays.asList(tempClass .getDeclaredFields()));
+                tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
+            }
+        }
+        return fieldList;
+    }
+
+    private static List<Method> getAllContextMethods(Object target){
+        List<Method> methodList = new ArrayList<>() ;
+        Class tempClass = target.getClass();
+        while (tempClass != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
+
+
+            if(tempClass.getName().contains("com.supcon.common.view")){
+                tempClass = null;
+            }
+            else {
+                methodList.addAll(Arrays.asList(tempClass.getDeclaredMethods()));
+                tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
+            }
+        }
+        return methodList;
+    }
+
     private static List<Field> getAllFields(Object target){
         List<Field> fieldList = new ArrayList<>() ;
         Class tempClass = target.getClass();
@@ -292,5 +435,20 @@ public class ViewBinder {
 
         }
         return field;
+    }
+
+    private static Object getFieldValue(Object target, String name){
+        Field field = getOneField(target, name);
+
+        if(field != null){
+            try {
+                field.setAccessible(true);
+                return field.get(target);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
     }
 }

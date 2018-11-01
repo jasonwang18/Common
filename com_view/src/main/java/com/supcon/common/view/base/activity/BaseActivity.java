@@ -38,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void onInit() {
         loaderController = new LoaderController(this, rootView);
-        ViewBinder.bind(this);
+        ViewBinder.bindTag(this);
     }
 
 
@@ -75,6 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化监听
      */
     protected void initListener() {
+        ViewBinder.bindCustomView(this, rootView);
         ViewBinder.bindListener(this, rootView);
     }
 

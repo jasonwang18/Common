@@ -45,7 +45,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected void onInit() {
         loaderController = new LoaderController(getContext(), rootView);
-        ViewBinder.bind(this, rootView);
+        ViewBinder.bindTag(this, rootView);
     }
 
     public View getRootView(){
@@ -76,6 +76,7 @@ public abstract class BaseFragment extends Fragment {
      * 初始化监听
      */
     protected void initListener() {
+        ViewBinder.bindCustomView(this, rootView);
         ViewBinder.bindListener(this, rootView);
     }
 

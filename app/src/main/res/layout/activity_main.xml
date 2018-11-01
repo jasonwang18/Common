@@ -48,6 +48,5 @@
         app:spinning_bar_width="3dp"
         app:initialCornerAngle="0dp"
         app:finalCornerAngle="50dp"
-
         />
 </LinearLayout>

@@ -17,5 +17,6 @@ public class TextApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(base);
+        AppConfig.DEBUG_ENABLE = true;
     }
 }

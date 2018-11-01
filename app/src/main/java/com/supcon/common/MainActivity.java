@@ -6,8 +6,10 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.EditText;
 
 import com.app.annotation.apt.Router;
+import com.app.annotation.custom.OnTextChange;
 import com.app.annotation.javassist.Bus;
 import com.supcon.common.com_router.event.OkBus;
 import com.supcon.common.com_router.util.RouterManager;
@@ -15,12 +17,16 @@ import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.view.loader.CircularLoaderView;
 
-//@Router("main")
+@Router("main")
 public class MainActivity extends BaseActivity {
 
     CircularLoaderView mCircularLoaderView;
 
     RouterManager mRouterManager = RouterManager.getInstance();
+
+    String result;
+
+    EditText mText;
 
     @Override
     protected int getLayoutID() {
@@ -33,7 +39,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.routerText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                IntentRouter.go(context, "routerTest");
+                IntentRouter.go(context, "routerTest");
             }
         });
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {

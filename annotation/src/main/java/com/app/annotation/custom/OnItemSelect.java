@@ -17,14 +17,13 @@ public @interface OnItemSelect {
 
     int DEFAULT = 18;
     int BIG = 22;
-    int small = 16;
+    int SMALL = 16;
 
     int textSize() default DEFAULT;
     boolean dividerVisble() default false;
     boolean cycleEnable() default true;
     boolean cancelOutsideEnable() default false;
-    String[] values();
-    String current();
+    String values();
     String param();
 
 }

@@ -1,10 +1,10 @@
-package com.supcon.common.view.util;
+package com.supcon.common.view.view.custom;
 
 import android.graphics.Typeface;
 import android.text.InputFilter;
 import android.widget.EditText;
 
-import com.supcon.common.view.listener.ICustomView;
+import com.supcon.common.view.view.custom.ICustomView;
 
 /**
  * 用于对自定义view的批量操作

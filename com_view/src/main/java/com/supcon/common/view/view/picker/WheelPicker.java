@@ -1,6 +1,7 @@
 package com.supcon.common.view.view.picker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
@@ -31,7 +32,7 @@ public abstract class WheelPicker extends ConfirmPopup<View> {
     protected boolean textSizeAutoFit = true;
     protected WheelView.DividerConfig dividerConfig = new WheelView.DividerConfig();
 
-    public WheelPicker(Activity activity) {
+    public WheelPicker(Context activity) {
         super(activity);
     }
 

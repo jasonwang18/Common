@@ -1,6 +1,6 @@
 package com.supcon.common.view.view.picker.framework;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
@@ -47,7 +47,7 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
     protected View titleView;
     protected View headerView, centerView, footerView;
 
-    public ConfirmPopup(Activity activity) {
+    public ConfirmPopup(Context activity) {
         super(activity);
         cancelText = activity.getString(android.R.string.cancel);
         submitText = activity.getString(android.R.string.ok);
@@ -281,7 +281,7 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
         rootLayout.setBackgroundColor(backgroundColor);
         rootLayout.setOrientation(LinearLayout.VERTICAL);
         rootLayout.setGravity(Gravity.CENTER);
-        rootLayout.setPadding(0, 0, 0, 0);
+        rootLayout.setPadding(10, 0, 10, 0);
         rootLayout.setClipToPadding(false);
         View headerView = makeHeaderView();
         if (headerView != null) {
@@ -289,7 +289,10 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
         }
         if (topLineVisible) {
             View lineView = new View(activity);
-            lineView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, topLineHeightPixels));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, topLineHeightPixels);
+            lp.topMargin = ConvertUtils.toPx(activity, 0);
+            lp.bottomMargin = ConvertUtils.toPx(activity, 5);
+            lineView.setLayoutParams(lp);
             lineView.setBackgroundColor(topLineColor);
             rootLayout.addView(lineView);
         }
@@ -325,7 +328,7 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
         }
         RelativeLayout topButtonLayout = new RelativeLayout(activity);
         int height = ConvertUtils.toPx(activity, topHeight);
-        int p = ConvertUtils.toPx(activity, 5);
+        int p = ConvertUtils.toPx(activity, 10);
         topButtonLayout.setLayoutParams(new RelativeLayout.LayoutParams(MATCH_PARENT, height));
         topButtonLayout.setBackgroundColor(topBackgroundColor);
         topButtonLayout.setGravity(Gravity.CENTER_VERTICAL);

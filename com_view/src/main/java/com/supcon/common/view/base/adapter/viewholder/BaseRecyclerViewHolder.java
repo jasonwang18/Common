@@ -76,7 +76,7 @@ public  abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder
      * 初始化bind, 不然view找不到
      */
     protected void initBind() {
-        ViewBinder.bind(this, itemView);
+        ViewBinder.bindTag(this, itemView);
     }
 
     /**
@@ -89,6 +89,7 @@ public  abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder
      * 初始化监听
      */
     protected void initListener() {
+        ViewBinder.bindCustomView(this, itemView);
         ViewBinder.bindListener(this, itemView);
 
     }

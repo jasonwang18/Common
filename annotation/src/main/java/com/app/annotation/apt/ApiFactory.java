@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface ApiFactory {
-
-    String name();
+    String DEFAULT = "HttpClient";
+    String name() default DEFAULT;
 
 }

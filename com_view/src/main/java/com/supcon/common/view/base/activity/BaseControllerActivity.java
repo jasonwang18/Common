@@ -45,6 +45,10 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
                             constructor = controller.getConstructor(new Class[]{View.class});
                             baseController = (Lifecycle) constructor.newInstance(rootView);
                         }
+                        else{
+                            constructor = controller.getConstructor(new Class[]{View.class});
+                            baseController = (Lifecycle) constructor.newInstance(rootView);
+                        }
 
                         if(baseController!=null) {
                             LogUtil.d("controller " + controller.getName() + " added!");

@@ -14,5 +14,20 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface OnDateChange {
 
+    int DEFAULT = 18;
+    int BIG = 22;
+    int SMALL = 16;
+
+    int TYPE_LONG = 0;
+    int TYPE_DATE = 1;
+
+    int type() default TYPE_LONG;
+
+
+    int textSize() default DEFAULT;
+    boolean dividerVisble() default false;
+    boolean cycleEnable() default true;
+    boolean cancelOutsideEnable() default false;
+    boolean secondVisible() default false;
     String param();
 }

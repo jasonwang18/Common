@@ -51,7 +51,7 @@ public abstract class BaseBaseViewHolder<T> {
      * 初始化bind, 不然view找不到
      */
     protected void initBind() {
-        ViewBinder.bind(this, rootView);
+        ViewBinder.bindTag(this, rootView);
     }
 
     /**
@@ -64,7 +64,8 @@ public abstract class BaseBaseViewHolder<T> {
      * 初始化监听
      */
     protected void initListener() {
-
+        ViewBinder.bindCustomView(this, rootView);
+        ViewBinder.bindCustomView(this, rootView);
     }
 
     /**

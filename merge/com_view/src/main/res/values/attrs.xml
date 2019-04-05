@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RoundImageView">
+        <attr name="roundWidth" format="dimension" />
+        <attr name="roundHeight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="RotateLoaderView">
+        <attr name="loading_width" format="dimension"/>
+        <attr name="loading_color" format="color"/>
+        <attr name="shadow_position" format="integer"/>
+        <attr name="loading_speed" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="CircularLoaderView">
+        <attr name="spinning_bar_width" format="dimension"/>
+        <attr name="spinning_bar_color" format="color"/>
+        <attr name="spinning_bar_padding" format="dimension"/>
+        <attr name="initialCornerAngle" format="dimension"/>
+        <attr name="finalCornerAngle" format="dimension"/>
+
+    </declare-styleable>
+</resources>

@@ -20,10 +20,12 @@ public @interface OnDateChange {
 
     int TYPE_LONG = 0;
     int TYPE_DATE = 1;
+    String DATE = "yyyy-MM-dd";
+    String DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 
     int type() default TYPE_LONG;
 
-
+    String format() default DATE_TIME;
     int textSize() default DEFAULT;
     boolean dividerVisble() default false;
     boolean cycleEnable() default true;

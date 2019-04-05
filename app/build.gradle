@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 //import com.app.plugin.AspectjPlugin
 //import com.app.plugin.JavassistPlugin
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.jasonwang18'
 android {
-    compileSdkVersion       rootProject.ext.compileSdkVersion
-    buildToolsVersion       rootProject.ext.buildToolsVersion
+    compileSdkVersion       28
+    buildToolsVersion       '28.0.3'
     defaultConfig {
         applicationId "com.jason.common"
         minSdkVersion 19

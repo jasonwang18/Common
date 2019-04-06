@@ -15,6 +15,7 @@ public abstract class BaseLinearLayout extends LinearLayout {
     protected OnChildViewClickListener onChildViewClickListener;
     protected View rootView;
     protected Context context;
+
     public void setOnChildViewClickListener(OnChildViewClickListener onChildViewClickListener) {
         this.onChildViewClickListener = onChildViewClickListener;
     }

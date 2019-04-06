@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Common.iml" filepath="$PROJECT_DIR$/Common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/annotation/annotation.iml" filepath="$PROJECT_DIR$/annotation/annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apt/apt.iml" filepath="$PROJECT_DIR$/apt/apt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com_http/com_http.iml" filepath="$PROJECT_DIR$/com_http/com_http.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com_router/com_router.iml" filepath="$PROJECT_DIR$/com_router/com_router.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com_view/com_view.iml" filepath="$PROJECT_DIR$/com_view/com_view.iml" />
     </modules>
   </component>
 </project>

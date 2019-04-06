@@ -1,12 +1,17 @@
 package com.supcon.common.view.base.controller;
 
+import android.content.Intent;
+
 import com.supcon.common.view.Lifecycle;
+import com.supcon.common.view.base.IData;
+
+import java.util.Map;
 
 /**
  * Created by wangshizhan on 17/6/29.
  */
 
-public  class BaseController implements Lifecycle {
+public  class BaseController implements Lifecycle, IData{
 
     /**
      * 最初初始化
@@ -75,5 +80,30 @@ public  class BaseController implements Lifecycle {
      */
     public void onRetry() {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public boolean checkBeforeSubmit(Map<String, Object> map) {
+        return doSave(map);
+    }
+
+    @Override
+    public boolean doSave(Map<String, Object> map) {
+        return true;
+    }
+
+    @Override
+    public boolean isModified() {
+        return false;
     }
 }

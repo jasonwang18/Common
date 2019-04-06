@@ -37,7 +37,7 @@ public class SinglePicker<T> extends WheelPicker {
         this(activity, Arrays.asList(items));
     }
 
-    public SinglePicker(Context activity, List<T> items) {
+    public SinglePicker(Activity activity, List<T> items) {
         super(activity);
         setItems(items);
     }

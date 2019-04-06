@@ -32,7 +32,7 @@ public class DefautLoader extends BaseLoader{
             View contentView = mloader.getContentView();
             CircularLoaderView circularButtonLoaderView = contentView.findViewById(R.id.common_loader);
             circularButtonLoaderView.setDoneColor(ContextCompat.getColor(context, R.color.bapThemeBlue));
-            circularButtonLoaderView.setInitialHeight(100);
+            circularButtonLoaderView.setInitialHeight(DisplayUtil.dip2px(80, context));
             circularButtonLoaderView.setSpinningBarColor(ContextCompat.getColor(context, R.color.bapThemeOrange));
             mloader.update();
         }
@@ -64,7 +64,7 @@ public class DefautLoader extends BaseLoader{
                 contentView = LayoutInflater.from(context).inflate(R.layout.ly_loader_lol, null);
                 circularButtonLoaderView = contentView.findViewById(R.id.common_loader);
                 circularButtonLoaderView.setDoneColor(ContextCompat.getColor(context, R.color.bapThemeBlue));
-                circularButtonLoaderView.setInitialHeight(100);
+                circularButtonLoaderView.setInitialHeight(DisplayUtil.dip2px(80, context));
                 circularButtonLoaderView.setSpinningBarColor(ContextCompat.getColor(context, R.color.bapThemeOrange));
                 mloader = new MyPopupWindow(DisplayUtil.dip2px(120, context),
                         DisplayUtil.dip2px(120, context));
@@ -138,7 +138,7 @@ public class DefautLoader extends BaseLoader{
             CircularLoaderView circularButtonLoaderView = contentView.findViewById(R.id.common_loader);
             ((TextView)contentView.findViewById(R.id.common_msg)).setText(hasMsg?msg:"操作成功");
             circularButtonLoaderView.doneLoadingAnimation(ContextCompat.getColor(context, R.color.bapThemeBlue),
-                    BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_done_success3));
+                    BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_success2));
         }
     }
 
@@ -151,7 +151,7 @@ public class DefautLoader extends BaseLoader{
             textView.setVisibility(View.VISIBLE);
             textView.setText(msg);
             circularButtonLoaderView.doneLoadingAnimation(ContextCompat.getColor(context, R.color.bapThemeOrange),
-                    BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_done_failed3));
+                    BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_fail));
         }
     }
 
@@ -166,12 +166,12 @@ public class DefautLoader extends BaseLoader{
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(msg);
                 circularButtonLoaderView.doneLoadingAnimation(ContextCompat.getColor(context, R.color.bapThemeOrange),
-                        BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_done_failed3));
+                        BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_fail));
             }
             else{
                 ((TextView)contentView.findViewById(R.id.common_msg)).setText(hasMsg?msg:"操作成功");
                 circularButtonLoaderView.doneLoadingAnimation(ContextCompat.getColor(context, R.color.bapThemeBlue),
-                        BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_done_success3));
+                        BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_success2));
             }
 
 

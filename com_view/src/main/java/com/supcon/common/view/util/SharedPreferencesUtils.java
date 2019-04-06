@@ -5,9 +5,11 @@ package com.supcon.common.view.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.text.TextUtils;
 
 import static android.content.Context.MODE_MULTI_PROCESS;
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
 import static android.content.Context.MODE_WORLD_WRITEABLE;
 
@@ -23,8 +25,8 @@ public class SharedPreferencesUtils{
      * 缓存文件名
      */
     private static final String CACHE_FILE_NAME = "common-cache";
-
-    private static final int MODE = MODE_WORLD_WRITEABLE | MODE_WORLD_READABLE| MODE_MULTI_PROCESS;
+    private static final int MODE7 = MODE_PRIVATE;
+    private static final int MODE = MODE_WORLD_WRITEABLE | MODE_WORLD_READABLE | MODE_MULTI_PROCESS;
     /**
      * 保存数据
      *
@@ -45,8 +47,7 @@ public class SharedPreferencesUtils{
             return;
         }
         String type = object.getClass().getSimpleName();
-        SharedPreferences sp = context.getSharedPreferences(fileName,
-                MODE);
+        SharedPreferences sp = getSharedPreferences(context, fileName);
         SharedPreferences.Editor editor = sp.edit();
 
         if ("String".equals(type)) {
@@ -96,9 +97,7 @@ public class SharedPreferencesUtils{
             return null;
         }
         String type = defaultObject.getClass().getSimpleName();
-        SharedPreferences sp = context.getSharedPreferences(fileName,
-                MODE);
-
+        SharedPreferences sp = getSharedPreferences(context, fileName);
 
         if ("String".equals(type)) {
             return sp.getString(key, (String) defaultObject);
@@ -116,6 +115,23 @@ public class SharedPreferencesUtils{
         }
 
         return null;
+    }
+
+    private static SharedPreferences getSharedPreferences(Context context, String fileName) {
+
+        SharedPreferences sp = null;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            sp = context.getSharedPreferences(fileName,
+                    MODE7);
+        }
+        else{
+            sp = context.getSharedPreferences(fileName,
+                    MODE);
+        }
+
+
+        return sp;
+
     }
 
     /**
@@ -158,6 +174,7 @@ public class SharedPreferencesUtils{
         setParam(context, key, newconfig);
         return newconfig;
     }
+
 
 
 }

@@ -1,34 +1,37 @@
 package com.supcon.common.view.base.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
+import com.supcon.common.view.R;
+import com.supcon.common.view.base.IData;
+import com.supcon.common.view.util.KeyboardUtil;
 import com.supcon.common.view.util.LoaderErrorMsgHelper;
 import com.supcon.common.view.util.LogUtil;
-import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ViewBinder;
 import com.supcon.common.view.view.loader.base.LoaderController;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.common.view.view.swipeback.SwipeBackController;
+import com.supcon.common.view.view.swipeback.SwipeBackLayout;
+
+import java.util.Map;
 
 /**
  * Created by wangshizhan on 16/12/12.
  */
-public abstract class BaseFragmentActivity extends FragmentActivity {
+public abstract class BaseFragmentActivity extends FragmentActivity implements IData, SwipeBackController.Delegate{
 
 
     protected Context context;
     protected FragmentManager fragmentManager;
     protected View rootView;
     protected LoaderController loaderController;
+    protected SwipeBackController swipeBackController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +43,13 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         onInit();
         initView();
         initListener();
-//        initData();   //初始化数据放在视图加载完成之后，防止loader显示不出来
+        initData();   //初始化数据放在视图加载完成之后，防止loader显示不出来
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        initData();
+//        initData();
     }
 
     protected abstract int getLayoutID();
@@ -60,7 +63,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
      * 初始化 view
      */
     protected void initView() {
-
+        initSwipeBackController();
     }
 
     /**
@@ -156,22 +159,127 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         loaderController.closeLoader();
     }
 
-    protected void delayFinish(long timeDelay, final BaseActivity.OnActivityFinishListener listener){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(listener!=null){
-                    listener.onBeforFinish();
-                }
-                finish();
-            }
-        }, timeDelay);
+    @Override
+    public void refresh() {
+
     }
 
-    public interface OnActivityFinishListener{
+    @Override
+    public boolean checkBeforeSubmit(Map<String, Object> map) {
+        return doSave(map);
+    }
 
-        void onBeforFinish();
+    @Override
+    public boolean doSave(Map<String, Object> map) {
+        return true;
+    }
 
+    @Override
+    public boolean isModified() {
+        return false;
+    }
+
+
+    public void setStatusBarColor(int colorResId){
+        StatusBarUtils.setWindowStatusBarColor(this, colorResId);
+    }
+
+    /**
+     * 滑动返回是否可用
+     */
+    @Override
+    public boolean isSwipeBackEnable() {
+        return swipeBackController!=null&&swipeBackController.isSwipeBackEnable();
+    }
+
+    public void setSwipeBackEnable(boolean swipeBackEnable) {
+
+        if(swipeBackController!=null){
+            swipeBackController.setSwipeBackEnable(swipeBackEnable);
+        }
+
+    }
+
+    /**
+     * 初始化滑动返回。在 super.onCreate(savedInstanceState) 之前调用该方法
+     */
+    private void initSwipeBackController() {
+        swipeBackController = new SwipeBackController(this, this);
+
+        // 「必须在 Application 的 onCreate 方法中执行 SwipeBackController.init 来初始化滑动返回」
+        // 下面几项可以不配置，这里只是为了讲述接口用法。
+
+        // 设置滑动返回是否可用。默认值为 true
+        swipeBackController.setSwipeBackEnable(true);
+        // 设置是否仅仅跟踪左侧边缘的滑动返回。默认值为 true
+        swipeBackController.setIsOnlyTrackingLeftEdge(true);
+        // 设置是否是微信滑动返回样式。默认值为 true
+        swipeBackController.setIsWeChatStyle(true);
+        // 设置阴影资源 id。默认值为 R.drawable.bga_sbl_shadow
+        swipeBackController.setShadowResId(R.drawable.bg_sbl_shadow);
+        // 设置是否显示滑动返回的阴影效果。默认值为 true
+        swipeBackController.setIsNeedShowShadow(true);
+        // 设置阴影区域的透明度是否根据滑动的距离渐变。默认值为 true
+        swipeBackController.setIsShadowAlphaGradient(true);
+        // 设置触发释放后自动滑动返回的阈值，默认值为 0.3f
+        swipeBackController.setSwipeBackThreshold(0.3f);
+        // 设置底部导航条是否悬浮在内容上，默认值为 false
+        swipeBackController.setIsNavigationBarOverlap(false);
+    }
+
+    /**
+     * 是否支持滑动返回。这里在父类中默认返回 true 来支持滑动返回，如果某个界面不想支持滑动返回则重写该方法返回 false 即可
+     *
+     * @return
+     */
+    @Override
+    public boolean isSupportSwipeBack() {
+        return true;
+    }
+
+    /**
+     * 正在滑动返回
+     *
+     * @param slideOffset 从 0 到 1
+     */
+    @Override
+    public void onSwipeBackSlide(float slideOffset) {
+    }
+
+    /**
+     * 没达到滑动返回的阈值，取消滑动返回动作，回到默认状态
+     */
+    @Override
+    public void onSwipeBackCancel() {
+    }
+
+    /**
+     * 滑动返回执行受阻
+     * @param errorCode  错误码
+     */
+    @Override
+    public void onSwipeBackStop(int errorCode) {
+        if(errorCode == SwipeBackLayout.ERROR_MSG_MODIFIED){
+//            LogUtil.e("error:ERROR_MSG_MODIFIED");
+            onBackPressed();
+        }
+    }
+
+    /**
+     * 滑动返回执行完毕，销毁当前 Activity
+     */
+    @Override
+    public void onSwipeBackExecuted() {
+        KeyboardUtil.closeKeyboard(this);
+        back();
+        executeBackwardAnim();
+    }
+
+    /**
+     * 执行回到到上一个 Activity 的动画。这里弄成静态方法，方便在 Fragment 中调用
+     */
+    public void executeBackwardAnim() {
+        overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
     }
 
 }

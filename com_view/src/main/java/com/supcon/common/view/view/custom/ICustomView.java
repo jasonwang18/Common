@@ -14,9 +14,11 @@ public interface ICustomView {
 
     void setEditable(boolean isEditable);
     void setNecessary(boolean isNecessary);
+    void setIntercept(boolean isIntercept);
     boolean isNecessary();
     boolean isEditable();
     boolean isEmpty();
+    boolean isIntercept();
     void setInputType(int type);
     void setKey(String key);
     void setKey(int keyResId);

@@ -1,6 +1,8 @@
 package com.supcon.common.view;
 
 
+import android.content.Intent;
+
 /**
  * Created by wangshizhan on 16/12/2.
  */
@@ -34,4 +36,6 @@ public interface Lifecycle {
     void onDestroy();
 
     void onRetry();
+
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 }

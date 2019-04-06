@@ -2,23 +2,24 @@ package com.supcon.common.view.base.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.base.IData;
 import com.supcon.common.view.util.LoaderErrorMsgHelper;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ViewBinder;
 import com.supcon.common.view.view.loader.base.LoaderController;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 
+import java.util.Map;
+
 /**
  * Created by wangshizhan on 16/12/1.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements IData{
     protected View rootView;
     protected Context context;
 
@@ -149,15 +150,23 @@ public abstract class BaseFragment extends Fragment {
         loaderController.closeLoader();
     }
 
-    protected void delayFinish(long timeDelay, final BaseActivity.OnActivityFinishListener listener){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(listener!=null){
-                    listener.onBeforFinish();
-                }
-                getActivity().finish();
-            }
-        }, timeDelay);
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public boolean checkBeforeSubmit(Map<String, Object> map) {
+        return doSave(map);
+    }
+
+    @Override
+    public boolean doSave(Map<String, Object> map) {
+        return true;
+    }
+
+    @Override
+    public boolean isModified() {
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package com.supcon.common.view.base.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 import com.supcon.common.view.R;
@@ -242,6 +243,11 @@ public class RefreshController<TContentView extends View>  implements PtrHandler
      * activity 或 fragment onRetry
      */
     public void onRetry() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 }

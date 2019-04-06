@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 日期时间工具类
- *
- * @author 李玉江[QQ:1023694760]
- * @since 2015/8/5
+ * 日期时间工具类 picker专用
+ * Created by wangshizhan on 2017/11/20.
+ * Email:wangshizhan@supcon.com
  */
-public class DateUtils extends android.text.format.DateUtils {
+ public class DateUtils extends android.text.format.DateUtils {
     public static final int Second = 0;
     public static final int Minute = 1;
     public static final int Hour = 2;
@@ -229,7 +228,7 @@ public class DateUtils extends android.text.format.DateUtils {
 
 
     /**
-     * string2long
+     * 格式化时间 string2long
      * @param time
      * @return
      */
@@ -247,7 +246,7 @@ public class DateUtils extends android.text.format.DateUtils {
     }
 
     /**
-     * long2String
+     * 格式化时间 long2String
      * @param time 时间毫秒
      * @param format 格式
      * @return

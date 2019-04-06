@@ -2,7 +2,10 @@ package com.supcon.common.view.base.controller;
 
 import android.view.View;
 
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.util.ViewBinder;
+
+import java.util.Map;
 
 /**
  * Created by wangshizhan on 2018/7/23
@@ -44,4 +47,5 @@ public class BaseViewController extends BaseDataController {
         super.onDestroy();
         rootView = null;
     }
+
 }

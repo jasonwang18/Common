@@ -3,8 +3,8 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.jasonwang18'
 android {
-    compileSdkVersion       28
-    buildToolsVersion       '28.0.3'
+    compileSdkVersion       rootProject.ext.compileSdkVersion
+    buildToolsVersion       rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 17

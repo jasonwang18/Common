@@ -1,20 +1,25 @@
 package com.supcon.common.view.view.custom;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.app.annotation.custom.OnDateChange;
+import com.app.annotation.custom.OnTextChange;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.controller.BaseController;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DateUtils;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.view.picker.DatePicker;
 import com.supcon.common.view.view.picker.DateTimePicker;
 import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.common.view.view.picker.widget.WheelView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +36,12 @@ import io.reactivex.functions.Consumer;
 
 public class CustomViewController extends BaseController {
 
-    private Context context;
+    private Activity context;
     private SinglePicker<String> picker;
     private DateTimePicker dateTimePicker;
     private Map<String, Object> pickerConfig;
 
-    public CustomViewController(Context context) {
+    public CustomViewController(Activity context) {
         this.context = context;
 
     }
@@ -62,6 +67,7 @@ public class CustomViewController extends BaseController {
         params.put("isCycleEnable", true);
         params.put("isDividerVisible", true);
         params.put("isSecondVisible", false);
+        params.put("format", OnDateChange.DATE_TIME);
         params.put("textSize", 18);
 
         return params;
@@ -79,7 +85,12 @@ public class CustomViewController extends BaseController {
                     @Override
                     public void accept(CharSequence charSequence) throws Exception {
                         if(onResultListener!= null){
-                            onResultListener.onResult(charSequence.toString());
+
+                            if(TextUtils.isEmpty(charSequence)){
+                                onResultListener.onResult(null);
+                            }
+                            else
+                                onResultListener.onResult(charSequence.toString());
                         }
 
                     }
@@ -102,6 +113,9 @@ public class CustomViewController extends BaseController {
     public CustomViewController addSpinner(ICustomView iCustomView, Map<String, Object> params, final OnContentCallback<String> callback, final OnResultListener<String> resultListener){
 
 //        final String currentValue = (String) params.get("current");
+        if(params==null){
+            params = defaultConfig();
+        }
         String[] values = (String[]) params.get("values");
 
         final List<String> list = Arrays.asList(values);
@@ -136,8 +150,11 @@ public class CustomViewController extends BaseController {
 
 
     public CustomViewController addDate(ICustomView iCustomView, Map<String, Object> params, final OnContentCallback<Object> callback, final OnResultListener<String> resultListener){
-
+        if(params==null){
+            params = defaultConfig();
+        }
         final boolean isSecondVisible = (boolean) params.get("isSecondVisible");
+        final String format = (String) params.get("format");
 //        Object currentValue = params.get("current");
 //
 //        String[] dateStrs = null;
@@ -162,7 +179,9 @@ public class CustomViewController extends BaseController {
 //        }
 //
 //
+
         final DateTimePicker dateTimePicker = getDateTimePicker(params);
+
 //        if(isSecondVisible)
 //            dateTimePicker.setSelectedItem(Integer.valueOf(dateStrs[0]),
 //                    Integer.valueOf(dateStrs[1]), Integer.valueOf(dateStrs[2]),
@@ -178,19 +197,31 @@ public class CustomViewController extends BaseController {
             public void onChildViewClick(View childView, int action, Object obj) {
                 if (action != -1) {
                     setDatePickerSelectItem(isSecondVisible, callback.getContent(), dateTimePicker);
-                    dateTimePicker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
-                        @Override
-                        public void onDateTimePicked(String year, String month, String day, String hour, String minute, String second) {
-                            String dateStr = null;
-                            if(TextUtils.isEmpty(second))
-                                dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
-                            else
-                                dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":"+second;
-                            if (resultListener != null) {
-                                resultListener.onResult(dateStr);
+                    if(format.equals(OnDateChange.DATE)){
+                        ((DatePicker)dateTimePicker).setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                            @Override
+                            public void onDatePicked(String year, String month, String day) {
+                                String dateStr = year + "-" + month + "-" + day;
+                                if (resultListener != null) {
+                                    resultListener.onResult(dateStr);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else
+                        dateTimePicker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
+                            @Override
+                            public void onDateTimePicked(String year, String month, String day, String hour, String minute, String second) {
+                                String dateStr = null;
+                                if(TextUtils.isEmpty(second))
+                                    dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
+                                else
+                                    dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":"+second;
+                                if (resultListener != null) {
+                                    resultListener.onResult(dateStr);
+                                }
+                            }
+                        });
                     dateTimePicker.show();
                 } else {
                     if (resultListener != null)
@@ -318,7 +349,7 @@ public class CustomViewController extends BaseController {
         int textColorFocus = WheelView.TEXT_COLOR_FOCUS;
 
         if(picker == null)
-            picker = new SinglePicker<>(context, null);
+            picker = new SinglePicker<>(context, new ArrayList<String>());
         picker.setCanceledOnTouchOutside(isCanceledOnTouchOutside);
         picker.setCycleDisable(!isCycleEnable);
 
@@ -337,13 +368,21 @@ public class CustomViewController extends BaseController {
         int textSize = (int) params.get("textSize");
         int textColorNormal = WheelView.TEXT_COLOR_NORMAL;
         int textColorFocus = WheelView.TEXT_COLOR_FOCUS;
+        String format = (String) params.get("format");
 
         if(dateTimePicker == null) {
-            dateTimePicker = new DateTimePicker(context, DateTimePicker.HOUR_24);
+
+            if(format.equals(OnDateChange.DATE)){
+                dateTimePicker  = new DatePicker(context);
+            }
+            else {
+                dateTimePicker = new DateTimePicker(context, DateTimePicker.HOUR_24);
+                dateTimePicker.setTimeRangeStart(0, 0);
+                dateTimePicker.setTimeRangeEnd(23, 59);
+            }
             dateTimePicker.setDateRangeStart(2017, 1, 1);
             dateTimePicker.setDateRangeEnd(2025, 11, 11);
-            dateTimePicker.setTimeRangeStart(0, 0);
-            dateTimePicker.setTimeRangeEnd(23, 59);
+
         }
 
         dateTimePicker.setDividerVisible(isDividerVisible);

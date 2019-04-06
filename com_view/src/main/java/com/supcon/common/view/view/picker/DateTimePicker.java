@@ -1,7 +1,6 @@
 package com.supcon.common.view.view.picker;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -99,11 +98,11 @@ public class DateTimePicker extends WheelPicker {
      * @see #HOUR_24
      * @see #HOUR_12
      */
-    public DateTimePicker(Context activity, @TimeMode int timeMode) {
+    public DateTimePicker(Activity activity, @TimeMode int timeMode) {
         this(activity, YEAR_MONTH_DAY, timeMode);
     }
 
-    public DateTimePicker(Context activity, @DateMode int dateMode, @TimeMode int timeMode) {
+    public DateTimePicker(Activity activity, @DateMode int dateMode, @TimeMode int timeMode) {
         super(activity);
         if (dateMode == NONE && timeMode == NONE) {
             throw new IllegalArgumentException("The modes are NONE at the same time");

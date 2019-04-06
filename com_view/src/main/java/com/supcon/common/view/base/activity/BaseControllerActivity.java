@@ -1,17 +1,22 @@
 package com.supcon.common.view.base.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.app.annotation.Controller;
 import com.supcon.common.view.Lifecycle;
 import com.supcon.common.view.LifecycleManage;
+import com.supcon.common.view.base.controller.BaseController;
 import com.supcon.common.view.util.LogUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -20,7 +25,8 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class BaseControllerActivity extends BasePresenterActivity {
 
     protected LifecycleManage controllers = new LifecycleManage();
-    
+    protected List<BaseController> dataControllers = new ArrayList<>();
+
     protected void initControllers() {
         Annotation[] annotations = getClass().getAnnotations();
         for (Annotation annotation:annotations){
@@ -32,27 +38,28 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
 
                     try {
                         Constructor constructor = null;
-                        Lifecycle baseController = null;
+                        BaseController baseController = null;
                         if(controller.getSuperclass().getSimpleName().equals("BasePresenterController")){
                             constructor = controller.getConstructor();
-                            baseController = (Lifecycle) constructor.newInstance();
+                            baseController = (BaseController) constructor.newInstance();
                         }
                         else if(controller.getSuperclass().getSimpleName().equals("BaseDataController")) {
                             constructor = controller.getConstructor(new Class[]{Context.class});
-                            baseController = (Lifecycle) constructor.newInstance(context);
+                            baseController = (BaseController) constructor.newInstance(context);
                         }
                         else if(controller.getSuperclass().getSimpleName().equals("BaseViewController")){
                             constructor = controller.getConstructor(new Class[]{View.class});
-                            baseController = (Lifecycle) constructor.newInstance(rootView);
+                            baseController = (BaseController) constructor.newInstance(rootView);
                         }
                         else{
                             constructor = controller.getConstructor(new Class[]{View.class});
-                            baseController = (Lifecycle) constructor.newInstance(rootView);
+                            baseController = (BaseController) constructor.newInstance(rootView);
                         }
 
                         if(baseController!=null) {
                             LogUtil.d("controller " + controller.getName() + " added!");
-                            controllers.register(controller.getSimpleName(), baseController);
+                            registerController(controller.getSimpleName(), baseController);
+                            addDataController(baseController);
                         }
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
@@ -69,6 +76,10 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
 
             }
         }
+    }
+
+    protected void addDataController(BaseController baseController){
+        dataControllers.add(baseController);
     }
 
     /**
@@ -172,8 +183,53 @@ public abstract class BaseControllerActivity extends BasePresenterActivity {
         controllers.onDestroy();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        controllers.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void onRetry(){
         controllers.onRetry();
+    }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        for(BaseController baseController : dataControllers){
+            baseController.refresh();
+        }
+    }
+
+    @Override
+    public boolean checkBeforeSubmit(Map<String, Object> map) {
+        for(BaseController baseController : dataControllers){
+            if(!baseController.checkBeforeSubmit(map)){
+                return false;
+            }
+        }
+        return super.checkBeforeSubmit(map);
+    }
+
+    @Override
+    public boolean doSave(Map<String, Object> map) {
+        for(BaseController baseController : dataControllers){
+            if(!baseController.doSave(map)){
+                return false;
+            }
+        }
+        return super.doSave(map);
+    }
+
+    @Override
+    public boolean isModified() {
+        boolean isModified;
+        for(BaseController baseController : dataControllers){
+            isModified = baseController.isModified();
+            if(isModified){
+                return true;
+            }
+        }
+        return super.isModified();
     }
 }

@@ -7,8 +7,8 @@ import android.app.Activity;
  */
 public class DatePicker extends DateTimePicker {
 
-    public DatePicker(Activity activity) {
-        this(activity, YEAR_MONTH_DAY);
+    public DatePicker(Activity context) {
+        this(context, YEAR_MONTH_DAY);
     }
 
     /**
@@ -16,8 +16,8 @@ public class DatePicker extends DateTimePicker {
      * @see #YEAR_MONTH
      * @see #MONTH_DAY
      */
-    public DatePicker(Activity activity, @DateMode int mode) {
-        super(activity, mode, NONE);
+    public DatePicker(Activity context, @DateMode int mode) {
+        super(context, mode, NONE);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.supcon.common.view;
 
+import android.content.Intent;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,6 +92,13 @@ public class LifecycleManage implements Lifecycle {
     public void onRetry() {
         for (Map.Entry<String, Lifecycle> entry : iifecycleMap.entrySet()) {
             entry.getValue().onRetry();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (Map.Entry<String, Lifecycle> entry : iifecycleMap.entrySet()) {
+            entry.getValue().onActivityResult(requestCode, resultCode, data);
         }
     }
 

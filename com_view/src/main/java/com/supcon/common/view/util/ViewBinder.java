@@ -103,7 +103,7 @@ public class ViewBinder {
                 return;
             }
 
-            CustomViewController customViewController = new CustomViewController(source.getContext());
+            CustomViewController customViewController = new CustomViewController((Activity)source.getContext());
 
             final OnDateChange onDateChange = field.getAnnotation(OnDateChange.class);
             if(onDateChange!=null){
@@ -117,13 +117,14 @@ public class ViewBinder {
                     boolean isCycleEnable = onDateChange.cycleEnable();
                     boolean isSecondVisible = onDateChange.secondVisible();
                     int textSize = onDateChange.textSize();
+                    final String format = onDateChange.format();
 
                     Map<String, Object> params = new HashMap<>();
                     params.put("isCanceledOutsideEnable", isCancelOutsideEnable);
                     params.put("isCycleEnable", isCycleEnable);
                     params.put("isDividerVisible", isDividerVisible);
                     params.put("isSecondVisible", isSecondVisible);
-//                    params.put("current", current);
+                    params.put("format", format);
                     params.put("textSize", textSize);
 
                     customViewController.addDate(customView, params, new OnContentCallback<Object>() {
@@ -140,7 +141,7 @@ public class ViewBinder {
                                 setParam(target, result, param);
                             }
                             else {
-                                setParam(target, DateUtils.dateFormat(result, "yyyy-MM-dd HH:mm:ss"),  param);
+                                setParam(target, DateUtils.dateFormat(result, format),  param);
                             }
                         }
                     });
@@ -199,6 +200,12 @@ public class ViewBinder {
                                 @Override
                                 public void onResult(String result) {
                                     String param = onTextChange.param();
+//                                    Object p = getParam(target, param);
+//                                    if(result == null){
+//                                       if(p == null || "".equals(p)){
+//                                           return;
+//                                       }
+//                                    }
                                     setParam(target, result, param);
                                 }
                             });
@@ -230,7 +237,14 @@ public class ViewBinder {
                             paramField.set(entity, result);
                         }
                     }
+            }
+            else{
+                paramField = getOneField(target, param);
+                if(paramField!= null){
+                    paramField.setAccessible(true);
+                    paramField.set(target, result);
                 }
+            }
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -267,6 +281,17 @@ public class ViewBinder {
                     }
                 }
             }
+            else{
+                paramField = getOneField(target, param);
+                if(paramField!= null){
+                    paramField.setAccessible(true);
+                    Object current =  paramField.get(target);
+                    if(current!=null){
+                        return current;
+                    }
+                }
+            }
+
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();

@@ -1,1 +1,1 @@
-include ':app', ':com_view', ':com_http', ':com_router', ':apt', ':annotation', ':plugin'/*, ':mbap'*/
+include /*':app', */':com_view', ':com_http', ':com_router', ':apt', ':annotation'/*, ':plugin', ':mbap'*/

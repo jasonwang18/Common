@@ -32,7 +32,7 @@ public class PresenterRouter implements InvocationHandler{
 
         Class<?>[] interfaces = clazz.getSuperclass().getInterfaces();
 
-        if(interfaces == null && interfaces.length ==0){
+        if(interfaces == null || interfaces.length ==0){
             return null;
         }
 
@@ -47,7 +47,7 @@ public class PresenterRouter implements InvocationHandler{
 
         Class<?>[] interfaces = clazz.getSuperclass().getInterfaces();
 
-        if(interfaces == null && interfaces.length ==0){
+        if(interfaces == null || interfaces.length ==0){
             return false;
         }
 

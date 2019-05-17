@@ -102,8 +102,8 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 		this.setWebViewClient(generateBridgeWebViewClient());
 	}
 
-    protected BridgeWebViewClient generateBridgeWebViewClient() {
-        return new BridgeWebViewClient(this);
+    protected BridgeWebViewClientNew generateBridgeWebViewClient() {
+        return new BridgeWebViewClientNew(this);
     }
 
     /**

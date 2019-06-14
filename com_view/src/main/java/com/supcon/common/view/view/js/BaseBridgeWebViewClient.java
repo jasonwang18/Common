@@ -100,7 +100,7 @@ public abstract class BaseBridgeWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        BridgeUtil.webViewLoadLocalJs(view, BridgeWebView.MobileJs);
+        //BridgeUtil.webViewLoadLocalJs(view, BridgeWebView.MobileJs);
         BridgeUtil.webViewLoadLocalJs(view, BridgeWebView.toLoadJs);
 
         if (webView.getStartupMessage() != null) {

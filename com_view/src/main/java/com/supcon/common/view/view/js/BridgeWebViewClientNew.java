@@ -107,7 +107,7 @@ public class BridgeWebViewClientNew extends BaseBridgeWebViewClient {
             return true;
         }
 
-        return super.shouldOverrideUrlLoading(view, url);
+        return false;
     }
 
 

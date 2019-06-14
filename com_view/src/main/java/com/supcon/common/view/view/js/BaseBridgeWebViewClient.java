@@ -42,11 +42,13 @@ public abstract class BaseBridgeWebViewClient extends WebViewClient {
         } else if (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) { //
             webView.flushMessageQueue();
             return true;
-        } else {
-            return dealUrl(view, url);
-
+        } else if(dealUrl(view, url)){
+            
+            return true;
 
         }
+
+        return super.shouldOverrideUrlLoading(view, url);
     }
 
     protected abstract boolean dealUrl(WebView view, String url);

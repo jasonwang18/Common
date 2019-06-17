@@ -2,6 +2,7 @@ package com.supcon.common.view.view.js;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -110,11 +111,16 @@ public class BridgeWebViewClientNew extends BaseBridgeWebViewClient {
         return false;
     }
 
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        BridgeUtil.webViewLoadLocalJs(view, BridgeWebView.MobileJs);
+    }
 
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        BridgeUtil.webViewLoadLocalJs(view, BridgeWebView.MobileJs);
+        /*BridgeUtil.webViewLoadLocalJs(view, BridgeWebView.MobileJs);*/
 
     }
 

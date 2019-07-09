@@ -279,7 +279,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
      * 执行回到到上一个 Activity 的动画。这里弄成静态方法，方便在 Fragment 中调用
      */
     public void executeBackwardAnim() {
-        overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
+        overridePendingTransition(0, 0);
     }
 
 }

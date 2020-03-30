@@ -1,8 +1,11 @@
 apply plugin: 'java'
-
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin : 'com.jfrog.bintray'
 
-group='com.github.jasonwang18'
+//group='com.github.jasonwang18'
+//group = 'com.jasonwanghz.common'
+
+//apply plugin: 'com.novoda.bintray-release'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -15,3 +18,22 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 }
+
+//apply from: './annotation_push.gradle'
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('./local.properties').newDataInputStream())
+//def binUser = properties.getProperty("bintray.user")
+//def binKey = properties.getProperty("bintray.apikey")
+//publish {
+//    repoName = 'common'
+//    userOrg = 'jasonwanghz' // bintray 上注册的用户名
+//    groupId = 'com.jasonwanghz.common' // 包名
+//    artifactId = 'annotation' // library名
+//    publishVersion = '1.0.0' // 版本号
+//    desc = 'annotation for mvp and apt'
+//    website = 'https://github.com/jasonwang18/Common'
+//
+//    bintrayUser = binUser    // 用户名
+//    bintrayKey  = binKey     // api key
+//
+//}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.supcon.common.MainActivity"
+    android:background="@color/white"
+    >
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/routerText"
+        android:text="Router测试"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn"
+        android:text="loadingFailed"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn3"
+        android:text="loadingSuccess"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn4"
+        android:text="循环测试"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn5"
+        android:text="加载完成中断"
+        />
+
+    <com.supcon.common.view.view.loader.CircularLoaderView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/btn2"
+        app:spinning_bar_padding="0dp"
+        app:spinning_bar_color="@android:color/black"
+        app:spinning_bar_width="3dp"
+        app:initialCornerAngle="0dp"
+        app:finalCornerAngle="50dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn6"
+        android:text="Login Bus"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn7"
+        android:text="WebView"
+        />
+</LinearLayout>

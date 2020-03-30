@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin : 'com.jfrog.bintray'
+
 group='com.github.jasonwang18'
 android {
-    compileSdkVersion       rootProject.ext.compileSdkVersion
-    buildToolsVersion       rootProject.ext.buildToolsVersion
-
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -30,3 +31,5 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly project(':annotation')
 }
+
+apply from: './router_push.gradle'

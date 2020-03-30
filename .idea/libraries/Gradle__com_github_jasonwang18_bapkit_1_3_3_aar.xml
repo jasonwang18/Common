@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.jasonwang18:bapkit:1.3.3@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bapkit-1.3.3.aar/e9dd4a8854d4368a50c5e3a81f700901/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bapkit-1.3.3.aar/e9dd4a8854d4368a50c5e3a81f700901/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jasonwang18/bapkit/1.3.3/10de01b28f6038d0ee7e81fb88e2e2490f81899d/bapkit-1.3.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
